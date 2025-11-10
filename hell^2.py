@@ -2,13 +2,14 @@ import spacy
 import numpy
 import pywikibot
 import requests
-import wikipediaapi
+#import wikipediaapi
+from spacy.lang.en import English
 
 #required vars for def
 user_agent = 'fpsScraper; (https://francisparker.org; ctokunaga2026@francisparker.org)'
-site = pywikibot.Site("en", "wikipedia")
-nlp = spacy.load("en_core_web_sm")
-ruler = nlp.add_pipe("entity_ruler")
+#site = pywikibot.Site("en", "wikipedia")
+nlp = English()
+ruler = nlp.add_pipe("attribute_ruler")
 entTokens = []
 
 def tokenEnt(textVal):
@@ -17,17 +18,19 @@ def tokenEnt(textVal):
         for ent in doc.ents:
             print(ent.text)
             if not ent.text in entTokens :
-                pattern = []
+                insert = []
                 if len(ent) > 1:
                     for token in ent:
-                        pattern.append({"LOWER": token.text})
-                ruler.add_patterns({"label": "customTok", "pattern": pattern[>=0]})
+                        insert.append({"LOWER": token.text})
+                pattern = [{"patterns": [[{"TAG": "NNP"}]], "attrs": {"POS": "PROPN"}}, {"pattern": insert, "attrs": {"LEMMA": "namedEntity"}, "index": -1}]
+                #ruler.add_patterns(pattern)
+                print(pattern)
                 entTokens.append(ent.text)
         doc = nlp(" ".join([token.text for token in doc if not token.is_stop]))
 
         for token in doc:
             print(token.text)
-            print(token.dep_)
+            print(token.pos_)
 
 
         newInput = input("Search: ")
