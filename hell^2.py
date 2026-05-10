@@ -1,14 +1,14 @@
-import spacy
-import numpy
 import pywikibot
-import requests
-#import wikipediaapi
-from spacy.lang.en import English
+import spacy
+import wikipediaapi
+
 
 #required vars for def
 user_agent = 'fpsScraper; (https://francisparker.org; ctokunaga2026@francisparker.org)'
 #site = pywikibot.Site("en", "wikipedia")
-nlp = English()
+spacy.prefer_gpu()
+
+nlp = spacy.load("en_core_web_sm")
 ruler = nlp.add_pipe("attribute_ruler")
 entTokens = []
 
